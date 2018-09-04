@@ -3,24 +3,43 @@ const path = require('path');
 const UglifyJS = require('uglify-js');
 const SourceMap = require('source-map');
 const morgan = require('morgan');
+const session = require('express-session');
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
+app.set('view engine', 'ejs');
 app.use(morgan('common'));
-
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+
+app.use(session({
+  secret: 'source map demo app',
+  resave: true,
+  saveUninitialized: true
+}));
+
+app.get('/', (req, res) => {
+  res.render('index');
+});
 
 app.post('/encode', (req, res) => {
   const result = UglifyJS.minify({
     "source.js": req.body.source
   }, {
+    output: {
+      beautify: false
+    },
     sourceMap: {
-      filename: "source.js",
-      url: "out.js.map"
+      filename: "output.min.js",
+      url: "output.min.js.map",
+      includeSources: true
     }
   });
+
+  req.session.code = result.code;
+  req.session.source = req.body.source;
+  req.session.map = result.map;
 
   res.json({
     code: result.code,
@@ -28,16 +47,43 @@ app.post('/encode', (req, res) => {
   });
 });
 
+app.get('/output.html', (req, res) => {
+  res.render('output', {
+    code: req.session.code
+  })
+});
+
+app.get('/output.js', (req, res) => {
+  res.end(req.session.sou);
+});
+
+app.get('/source.js', (req, res) => {
+  res.end(req.session.source);
+});
+
+app.get('/output.min.js', (req, res) => {
+  res.header('content-type', 'application/javascript');
+  res.end(req.session.code);
+});
+
+app.get('/output.min.js.map', (req, res) => {
+  res.end(req.session.map);
+});
+
 app.post('/cursor', (req, res) => {
+  const source = req.body.source;
+
+  // 压缩代码并生成 sourcemap 文件
   const result = UglifyJS.minify({
-    "source.js": req.body.source
+    "output.js": source
   }, {
     sourceMap: {
-      filename: "source.js",
-      url: "out.js.map"
+      filename: "output.min.js",
+      url: "output.min.js.map"
     }
   });
 
+  // 从 sourcemap 里解析出对应的行、列、names
   SourceMap.SourceMapConsumer.with(result.map, null, consumer => {
     const result = [];
     req.body.ranges.forEach(range => {

@@ -1,0 +1,5 @@
+function foo(){
+  undefinedMethod();
+}
+
+foo();

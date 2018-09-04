@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <link href="https://cdn.bootcss.com/codemirror/5.38.0/codemirror.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/node-uuid/1.4.8/uuid.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/codemirror/5.38.0/codemirror.min.js"></script>
+    <script src="https://cdn.bootcss.com/codemirror/5.38.0/mode/javascript/javascript.min.js"></script>
+    <style>
+        .CodeMirror-scroll {
+            background: #eeeeee;
+        }
+
+        iframe {
+            border: 1px solid #afafaf;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            Editor
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8">
+                    Source：
+                    <select id="demo">
+                        <option selected value="./examples/foo.js">foo-throw</option>
+                        <option value="./examples/jquery.js">jQuery</option>
+                        <option value="./examples/stack.js">stack-RangeError</option>
+                        <option value="./examples/eval.js">eval-ReferenceError</option>
+                        <option value="./examples/undefined.js">undefined-ReferenceError</option>
+                        <option value="./examples/unhandledPromise.js">unhandledPromise-TypeError</option>
+                    </select>
+                    <textarea id="in"></textarea>
+                </div>
+
+                <div class="col-4">
+                    SourceMap:
+                    <textarea id="map"></textarea>
+                </div>
+
+                <div class="col-12">
+                    Output： <span id="cursor" class="badge badge-secondary"></span>
+                    <textarea id="out"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Preview
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-8">
+                    Iframe：<a href="./output.html">在新窗口中打开</a>
+                    <div>
+                        <iframe id="iframe"></iframe>
+                    </div>
+                </div>
+
+                <div class="col-4">
+                    <div>
+                        LatestError：
+                        <pre id="errorDetail"></pre>
+                    </div>
+
+                    <div>
+                        Parsed Error：
+                        <pre id="errorDetail"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="js/app.js"></script>
+</body>
+</html>

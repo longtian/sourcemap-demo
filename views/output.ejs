@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1, user-scalable=no">
+    <title>Output</title>
+    <style>
+        body.error {
+            background: red;
+            color: white;
+        }
+    </style>
+    <script>
+      window.onerror = function (error, file, line, column) {
+        window.parent.postMessage({
+          type: 'errorCaughtInIframe',
+          payload: {
+            error: error,
+            file: file,
+            line: line,
+            column: column
+          }
+        }, '*');
+        setTimeout(function () {
+          document.body.classList.add('error')
+          document.getElementById('state').innerText = error;
+        })
+      }
+
+      window.addEventListener("unhandledrejection", function (promise) {
+        // handle error here, for example log
+        window.parent.postMessage({
+          type: 'errorCaughtInIframe',
+          payload: {
+            stack: promise.reason.stack
+          }
+        }, '*');
+      });
+    </script>
+    <script src="./output.min.js"></script>
+</head>
+<body>
+<strong id="state">我是 iframe 里的节点</strong>
+</body>
+</html>
+
+

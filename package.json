@@ -11,10 +11,13 @@
   "author": "longtian <wyvernnot@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "ejs": "^2.6.1",
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
     "morgan": "^1.9.0",
-    "source-map": "^0.7.3",
     "nodemon": "^1.18.4",
+    "session-file-store": "^1.2.0",
+    "source-map": "^0.7.3",
     "uglify-js": "^3.4.9"
   }
 }
