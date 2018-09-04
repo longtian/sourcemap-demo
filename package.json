@@ -1,0 +1,20 @@
+{
+  "name": "source-map-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "longtian <wyvernnot@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
+    "source-map": "^0.7.3",
+    "nodemon": "^1.18.4",
+    "uglify-js": "^3.4.9"
+  }
+}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1, user-scalable=no">
+    <title>Title</title>
+    <link href="https://cdn.bootcss.com/codemirror/5.38.0/codemirror.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/codemirror/5.38.0/codemirror.min.js"></script>
+    <script src="https://cdn.bootcss.com/codemirror/5.38.0/mode/javascript/javascript.min.js"></script>
+    <style>
+        .column {
+            width: 50%;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+
+<div class="row">
+
+    <div class="col-8">
+        Source：
+        <textarea id="in" rows="10"></textarea>
+    </div>
+
+    <div class="col-4">
+        SourceMap:
+        <textarea id="map" rows="10"></textarea>
+    </div>
+
+
+    <div class="col-12">
+        Output：
+        <textarea id="out" rows="10"></textarea>
+    </div>
+</div>
+
+<script>
+
+  $(function () {
+
+    var sourceEditor = window.s = CodeMirror.fromTextArea($('#in').get(0), {
+      lineNumbers: true
+    });
+    var mapEditor = CodeMirror.fromTextArea($('#map').get(0), {
+      lineNumbers: true
+    });
+    var outEditor = CodeMirror.fromTextArea($('#out').get(0), {
+      lineNumbers: true
+    });
+
+    outEditor.on('beforeSelectionChange', function (c, changes) {
+      if (!changes.origin) {
+        return
+      }
+
+      $.ajax({
+        url: './cursor',
+        contentType: 'application/json',
+        dataType: 'JSON',
+        method: 'POST',
+        data: JSON.stringify({
+          source: sourceEditor.getValue(),
+          ranges: changes.ranges
+        }),
+        success: function (res) {
+
+          if (res[0].line === res[1].line && res[0].ch === res[1].ch) {
+            sourceEditor.setSelection({
+              line: res[0].line - 1,
+              ch: res[0].column
+            }, {
+              line: res[0].line - 1,
+              ch: res[0].column + res[0].name.length
+            })
+          } else {
+
+            sourceEditor.setSelection({
+              line: res[0].line - 1,
+              ch: res[0].column
+            }, {
+              line: res[1].line - 1,
+              ch: res[1].column
+            })
+          }
+
+        }
+      })
+    });
+
+    function parse () {
+      $.ajax({
+        url: './encode',
+        contentType: 'application/json',
+        dataType: 'JSON',
+        method: 'POST',
+        data: JSON.stringify({
+          source: sourceEditor.getValue()
+        }),
+        success: function (res) {
+          mapEditor.setValue(res.map);
+          outEditor.setValue(res.code);
+        }
+      })
+    }
+
+    sourceEditor.on('change', parse);
+
+    $.get('./jquery.txt', function (res) {
+      sourceEditor.setValue(res);
+      parse();
+    });
+  })
+</script>
+
+</body>
+</html>
