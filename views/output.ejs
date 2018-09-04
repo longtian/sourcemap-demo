@@ -11,14 +11,15 @@
         }
     </style>
     <script>
-      window.onerror = function (error, file, line, column) {
+      window.onerror = function (error, file, line, column, e) {
         window.parent.postMessage({
           type: 'errorCaughtInIframe',
           payload: {
             error: error,
             file: file,
             line: line,
-            column: column
+            column: column,
+            stack: e.stack
           }
         }, '*');
         setTimeout(function () {
