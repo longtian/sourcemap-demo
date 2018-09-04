@@ -1,4 +1,5 @@
-function foo(){
+function foo () {
+  // call an undefined method
   undefinedMethod();
 }
 

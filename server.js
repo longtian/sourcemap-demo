@@ -32,8 +32,7 @@ app.post('/encode', (req, res) => {
     },
     sourceMap: {
       filename: "output.min.js",
-      url: "output.min.js.map",
-      includeSources: true
+      url: "output.min.js.map"
     }
   });
 

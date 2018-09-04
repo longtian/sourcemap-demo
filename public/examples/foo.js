@@ -1,6 +1,6 @@
 function foo () {
   function bar () {
-    throw new Error('An error is thrown');
+    throw new Error('A custom error is thrown');
   }
 
   bar();

@@ -19,6 +19,10 @@
             border: 1px solid #afafaf;
             width: 100%;
         }
+
+        .highlight {
+            background: red;
+        }
     </style>
 </head>
 <body>
@@ -30,7 +34,7 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-8">
+                <div class="col-7">
                     Source：
                     <select id="demo">
                         <option selected value="./examples/foo.js">foo-throw</option>
@@ -43,13 +47,14 @@
                     <textarea id="in"></textarea>
                 </div>
 
-                <div class="col-4">
+                <div class="col-5">
                     SourceMap:
                     <textarea id="map"></textarea>
                 </div>
 
                 <div class="col-12">
-                    Output： <span id="cursor" class="badge badge-secondary"></span>
+                    Output：
+                    <span id="cursor" class="badge badge-secondary"></span>
                     <textarea id="out"></textarea>
                 </div>
             </div>

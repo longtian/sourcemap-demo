@@ -1,1 +1,1 @@
-eval('asdasdadl')
+eval('invalid syntax in eval call');
